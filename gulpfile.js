@@ -1,22 +1,35 @@
-const gulp = require('gulp')
-const del = require('del');
-const livereload = require('gulp-livereload')
-const rename = require('gulp-rename')
-const less = require('gulp-less')
-const autoprefixer = require('gulp-autoprefixer')
-// const combineMq = require('gulp-combine-mq') // error with fs.js primordial something
-const cssnano = require('gulp-cssnano')
-const concat = require('gulp-concat')
-const uglify = require('gulp-uglify')
-const cssbeautify = require('gulp-cssbeautify')
-var replace = require('gulp-replace');
+import {deleteAsync} from 'del'
+import gulpAutoprefixer from 'gulp-autoprefixer'
+import Gulp from 'gulp'
+import GulpLess from 'gulp-less'
+import GulpLiveReload from 'gulp-livereload'
+import GulpCssNano from 'gulp-cssnano'
+import GulpConcat from 'gulp-concat'
+import GulpUglify from 'gulp-uglify'
+import GulpCssBeautify from 'gulp-cssbeautify'
+import GulpReplace from 'gulp-replace'
+import GulpRename from 'gulp-rename'
+import LessPluginGlob from 'less-plugin-glob'
 
-const dist = '../HESH-WordPress-Plugin-dist';
+const gulp = Gulp
+const livereload = GulpLiveReload
+const rename = GulpRename
+const less = GulpLess
+const autoprefixer = gulpAutoprefixer
+// const combineMq = require('gulp-combine-mq') // error with fs.js primordial something
+const cssnano = GulpCssNano
+const concat = GulpConcat
+const uglify = GulpUglify
+const cssbeautify = GulpCssBeautify
+const lessGlob = LessPluginGlob
+var replace = GulpReplace;
+
+const dist = './dist';
 
 const compileCSS = () => {
 	return gulp.src('./src/hesh.less')
 		.pipe(less({
-			plugins: [require('less-plugin-glob')]
+			plugins: [lessGlob]
 		}))
 		.pipe(autoprefixer({
 			flexbox: 'no-2009'
@@ -32,7 +45,7 @@ const compileCSS = () => {
 			indent: '  ',
 			autosemicolon: true
 		}))
-		// .pipe(rename('hesh.css'))
+		.pipe(rename('hesh.css'))
 		.pipe(gulp.dest(dist))
 		.pipe(livereload())
 }
@@ -151,8 +164,8 @@ const buildReadMeTxt = () => {
 	*/
 }
 
-const clean = () => {
-	return del([
+async function clean () {
+	await deleteAsync([
 		dist + '/[^.]*.*', // anything that is not .hidden
 	], { force: true });
 }
@@ -176,10 +189,10 @@ const minify = gulp.parallel(minifyCSS, minifyJS)
 const dev = gulp.series(clean, compile, watch)
 
 const build = gulp.series(clean, compile, minify)
-const package = gulp.series(build, removeDevTitle, copyAssets)
+const packaging = gulp.series(build, removeDevTitle, copyAssets)
 
 gulp.task('compile', compile)
 gulp.task('build', build)
-gulp.task('package', package)
+gulp.task('packaging', packaging)
 gulp.task('dev', dev)
 gulp.task('default', dev)

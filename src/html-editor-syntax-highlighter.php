@@ -1,12 +1,14 @@
 <?php
 /**
- * Plugin Name:        HTML Editor Syntax Highlighter !DEV!
+ * Plugin Name:        HPM HTML Editor Syntax Highlighter !DEV!
  * Description:        Add syntax highlighting to the all WordPress code editors using Codemirror.js
  * Author:             James Bradford
  * Author URI:         http://bradford.digital/
  * Author:             Petr Mukhortov
  * Author URI:         http://mukhortov.com/
- * Version:            2.4.4
+ * Author:             Jared Counts
+ * Author URI:         https://www.houstonpublicmedia.org/
+ * Version:            2.4.5
  * 
  * @package            HESH_plugin
 **/

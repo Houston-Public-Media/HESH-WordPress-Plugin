@@ -4,7 +4,7 @@
  * @link     http://bradford.digital/
  * @author   Petr Mukhortov
  * @link     http://mukhortov.com/
-*/
+ */
 
 // console.log(window.heshOptions); // from wordpress php
 
@@ -26,8 +26,8 @@
 	var toolbar = document.getElementById('ed_toolbar');
 	var target =
 		document.getElementById('content') ||
-		document.getElementById('newcontent');
-	// || document.getElementsByClassName('editor-post-text-editor')[0]; // only in Code Editor mode?
+		document.getElementById('newcontent') ||
+		document.getElementsByClassName('editor-post-text-editor')[0]; // only in Code Editor mode?
 	var tabText = document.getElementById('content-html');
 	var tabVisual = document.getElementById('content-tmce');
 	var postID = document.getElementById('post_ID') != null ? document.getElementById('post_ID').value : 0;
@@ -485,7 +485,8 @@
 	}
 
 	function matchTextAreaHeight() {
-		editor.getWrapperElement().style.height = editor.getTextArea().style.height;
+		let height = editor.getTextArea().getBoundingClientRect().height + toolbar.offsetHeight;
+		editor.getWrapperElement().style.height = height.toString() + 'px';
 	}
 
 	var throttledMatchTextAreaMarginTop = throttleAnimationFrame(matchTextAreaMarginTop);
@@ -502,7 +503,7 @@
 		});
 		document.addEventListener('mouseup', function () {
 			document.removeEventListener('mousemove', matchTextAreaHeight);
-			// editor.refresh(); // TODO: put this somewhere else 
+			// editor.refresh(); // TODO: put this somewhere else
 		});
 	}
 
@@ -733,7 +734,7 @@
 		if (state.isActive()) return;
 		if (state.isGutenberg)
 			target = document.getElementsByClassName('editor-post-text-editor')[0];
-		if (target == null) return; // there is no textarea				
+		if (target == null) return; // there is no textarea
 
 		updateOptions();
 
@@ -768,6 +769,8 @@
 			attachDragResizeCopier();
 			attachFullHeightToggle();
 			attachFullscreen();
+			matchTextAreaHeight();
+			matchTextAreaMarginTop();
 		}
 		attachSettings();
 		setFontSizeAndLineHeight(+heshOptions.fontSize, +heshOptions.lineHeight);
