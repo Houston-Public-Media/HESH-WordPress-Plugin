@@ -487,6 +487,13 @@
 	function matchTextAreaHeight() {
 		let height = editor.getTextArea().getBoundingClientRect().height + toolbar.offsetHeight;
 		editor.getWrapperElement().style.height = height.toString() + 'px';
+		console.log('HESH editor height set');
+	}
+
+	function updateTextAreaHeight() {
+		let contentHeight = document.querySelector('.CodeMirror-scroll > .CodeMirror-sizer').getBoundingClientRect().height + toolbar.offsetHeight;
+		editor.getWrapperElement().style.height = contentHeight.toString() + 'px';
+		console.log('HESH editor height updated');
 	}
 
 	var throttledMatchTextAreaMarginTop = throttleAnimationFrame(matchTextAreaMarginTop);
@@ -771,6 +778,7 @@
 			attachFullscreen();
 			matchTextAreaHeight();
 			matchTextAreaMarginTop();
+			setInterval(updateTextAreaHeight, 5000);
 		}
 		attachSettings();
 		setFontSizeAndLineHeight(+heshOptions.fontSize, +heshOptions.lineHeight);
